@@ -4,11 +4,12 @@ import './css/home.css';
 
 export default function Home() {
     const [userData, setUserData] = useState([]);
-
+    const [dataSize,setDataSize] =useState([]);
+    var size = 100;
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch('http://localhost:7000/users');
+                const response = await fetch(`https://random-data-api.com/api/v2/users?size=${size}&response_type=json`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch user data');
                 }
@@ -22,6 +23,8 @@ export default function Home() {
         };
         fetchUserData();
     }, []);
+
+    
     return (
         <>
             <center>
@@ -33,16 +36,26 @@ export default function Home() {
                         <table border={1}>
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Id</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
                                     <th>Email</th>
-                                    <th>Details</th>
+                                    <th>Phone Number</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {userData.map((user) => (
-                                    <tr key={user.id}>
+                                    <tr key={user?.id}>
                                         <td>
-                                            <p>{user.name}</p>
+                                            <p>{user.id}</p>
+                                        </td>
+
+                                        <td>
+                                            <p>{user.first_name}</p>
+                                        </td>
+
+                                        <td>
+                                            <p>{user.last_name}</p>
                                         </td>
 
                                         <td>
@@ -50,11 +63,7 @@ export default function Home() {
                                         </td>
 
                                         <td>
-                                            <Link to='/userDetails' state={{id:user.id}}>
-                                                <button>
-                                                    View full details
-                                                </button>
-                                            </Link>
+                                            <p>{user.phone_number}</p>
                                         </td>
                                     </tr>
                                 ))}
